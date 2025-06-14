@@ -42,7 +42,7 @@ a {
 }
 
 #intro-logo {
-  width: 400px;
+  width: 350px;
   opacity: 0;
   animation: logoFadeIn 1.5s ease-in forwards;
 }
