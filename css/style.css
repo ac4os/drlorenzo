@@ -1,460 +1,159 @@
-/* Importação de fontes */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-
-/* Variáveis globais (com as cores originais) */
+/* ====== Reset & Tokens ====== */
 :root {
-    --light: #2c8b65;
-    --color-text: #fff;
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --gradient-bg: linear-gradient(-45deg, #133e2d, #2c8b65);
-    --cor-principal: #128c7e;
+  --bg: #0b0b0d;
+  --bg-2: #121216;
+  --text: #e9e9ef;
+  --muted: #a0a0ad;
+  --border: #22232b;
+  --primary-1: #6a5cff;
+  --primary-2: #8a7bff;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 18px;
+  --glass: rgba(255,255,255,.04);
+  --gradient: linear-gradient(135deg, var(--primary-1), var(--primary-2));
 }
 
-/* Adiciona box-sizing globalmente para melhor controle de layout */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-/* Tela de introdução estilo Netflix */
-#intro {
-    position: fixed;
-    z-index: 9999;
-    background: black;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: fadeOut 2s ease-out 2.5s forwards;
-}
-
-#intro-logo {
-    width: 150px;
-    opacity: 0;
-    animation: logoFadeIn 1.5s ease-in forwards;
-}
-
-/* Animações da introdução */
-@keyframes logoFadeIn {
-    to {
-        opacity: 1;
-        transform: scale(1.1);
-    }
-}
-
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        visibility: hidden;
-    }
-}
-
-/* Configurações globais */
-html {
-    scroll-behavior: smooth;
-}
-
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-    margin: 0;
-    background-color: var(--light);
-    color: var(--color-text);
-    font-family: 'Poppins', sans-serif;
-    position: relative;
+  margin: 0;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+  background: radial-gradient(1200px 800px at 20% -10%, rgba(106,92,255,.15), transparent 50%),
+              radial-gradient(900px 600px at 120% 10%, rgba(138,123,255,.12), transparent 50%),
+              var(--bg);
+  line-height: 1.6;
 }
 
-a {
-    color: var(--color-text);
-    text-decoration: none;
-    cursor: pointer;
+/* ====== A11y ====== */
+:focus-visible {
+  outline: 2px dashed var(--primary-2);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
 }
 
-/* Layout Principal */
-.main-container {
-    display: flex;
-    flex-direction: column;
+/* ====== Utilities ====== */
+.bg-glass { background: linear-gradient(to bottom, rgba(10,10,12,.75), rgba(10,10,12,.55)); backdrop-filter: blur(10px); }
+.text-muted-2 { color: var(--muted) !important; }
+.section-pad-top { padding-top: 110px; }
+.ratio-1x1 { aspect-ratio: 1 / 1; }
+.object-cover { object-fit: cover; }
+.rounded-4 { border-radius: 20px !important; }
+.shadow-soft { box-shadow: var(--shadow); }
+.title { font-weight: 700; font-size: clamp(1.6rem, 2.5vw, 2.2rem); text-align: center; margin-bottom: .75rem; }
+.section-subtitle { text-align: center; color: var(--muted); max-width: 720px; margin: 0 auto 1.25rem; }
+
+/* ====== Intro (splash Netflix-like) ====== */
+#intro{
+  position: fixed; inset: 0; background: #000; z-index: 9999;
+  display: grid; place-items: center; animation: fadeOut 1.8s ease-out 2.2s forwards;
+}
+#intro-logo{ width: 160px; opacity: 0; animation: logoFadeIn 1.2s ease-in forwards; }
+@keyframes logoFadeIn { to { opacity: 1; transform: scale(1.06);} }
+@keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+/* ====== Navbar ====== */
+.navbar-wrap{ height: 64px; }
+.navbar{ border-bottom: 1px solid rgba(255,255,255,.05); }
+.navbar .btn-gradient{ margin-left: .25rem; }
+
+/* ====== Hero ====== */
+.banner{ padding-bottom: 40px; border-bottom: 1px solid var(--border); position: relative; }
+.gradientText { background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.job{ font-weight: 700; display: inline-block; }
+.job span{ display:inline-block; border-right: 2px solid var(--text); min-width:1ch; }
+
+.avatar-container{
+  position: relative; padding: 16px; display: grid; place-items: center;
+}
+.avatar-container::before{
+  content:""; position:absolute; inset: 6% 6%; border-radius: var(--radius);
+  background: conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,.05), rgba(255,255,255,0)), var(--glass);
+  box-shadow: var(--shadow);
+}
+.avatar-img{ width: min(90%, 420px); border-radius: var(--radius); animation: float 3s ease-in-out infinite; }
+@keyframes float{ 0%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} 100%{ transform: translateY(0);} }
+
+.scroll-indicator{
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: -14px;
+  width: 40px; height: 40px; display:grid; place-items:center; color: var(--muted);
+  animation: bounce 2s infinite;
+}
+@keyframes bounce{ 0%,20%,50%,80%,100%{ transform: translate(-50%,0); } 40%{ transform: translate(-50%,-10px);} 60%{ transform: translate(-50%,-5px);} }
+
+/* ====== Cards / Sections ====== */
+.animated-section{ opacity: 0; transform: translateY(40px); transition: opacity .6s ease, transform .6s ease; }
+.animated-section.is-visible{ opacity: 1; transform: none; }
+.animated-card{ opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.animated-card.is-visible{ opacity: 1; transform: none; }
+
+.card{
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow); transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover{ transform: translateY(-6px); box-shadow: 0 14px 40px rgba(0,0,0,.45); }
+.card-img-top{ height: 200px; object-fit: cover; }
+
+.bg-blur-1, .bg-blur-2{
+  position: absolute; filter: blur(70px); opacity: .4; pointer-events: none;
+}
+.bg-blur-1{ inset:auto; width: 240px; height: 240px; background: #6a5cff44; bottom: -60px; right: -20px; }
+.bg-blur-2{ inset:auto; width: 300px; height: 300px; background: #8a7bff33; bottom: -80px; left: -40px; }
+
+/* ====== Social + WhatsApp Float ====== */
+.social-links li{ list-style: none; }
+.social-icon{
+  width: 52px; height: 52px; border-radius: 12px; display:flex; align-items:center; justify-content:center;
+  background: var(--bg-2); border: 1px solid var(--border); box-shadow: var(--shadow); font-size: 22px;
+  transition: transform .2s ease, background .35s ease;
+}
+.social-icon:hover{ transform: translateY(-4px); background: var(--gradient); color: #fff; }
+
+.whatsapp-float{
+  position: fixed; width: 56px; height: 56px; bottom: 20px; right: 20px; border-radius: 50%;
+  display:flex; align-items:center; justify-content:center; background:#25d366; color:#fff; font-size:24px;
+  box-shadow: var(--shadow); z-index: 1000; transition: transform .2s ease, filter .2s ease;
+}
+.whatsapp-float:hover{ transform: scale(1.05); filter: brightness(1.1); }
+.whatsapp-popup{
+  position: absolute; right: 110%; top: 50%; transform: translateY(-50%);
+  background: #333; color:#fff; border-radius: 8px; padding: 6px 10px; font-size: .85rem; white-space: nowrap;
+  opacity: 0; visibility: hidden; transition: opacity .25s ease;
+}
+.whatsapp-float:hover .whatsapp-popup{ opacity: 1; visibility: visible; }
+.whatsapp-popup::after{
+  content:""; position:absolute; left:100%; top:50%; transform: translateY(-50%);
+  border: 6px solid transparent; border-left-color:#333;
 }
 
-.main-content {
-    flex-grow: 1;
-    padding-top: 50px;
+/* ====== Buttons ====== */
+.btn-gradient{
+  background-image: var(--gradient); color: #fff !important; border: none; box-shadow: var(--shadow);
 }
+.btn-gradient:hover{ filter: brightness(1.1); transform: translateY(-1px); }
+.btn-outline-light{ border-color: #ffffff44; color: #fff; }
+.btn-outline-light:hover{ background: #ffffff18; }
 
-/* Banner de apresentação */
-.banner {
-    padding-bottom: 50px;
-    border-bottom: 1px solid #2c8b65;
+/* ====== Back to top ====== */
+#btnTopo{
+  position: fixed; bottom: 20px; left: 20px; width: 48px; height: 48px; border-radius: 50%; border: none;
+  background: #111; color: #fff; display:flex; align-items:center; justify-content:center;
+  box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(16px);
+  transition: opacity .3s ease, transform .3s ease;
 }
+#btnTopo.show{ opacity: 1; pointer-events: auto; transform: none; }
 
-.banner h1 {
-    font-size: 3.5em;
-    margin: 0;
-    font-weight: 600;
+/* ====== Footer ====== */
+footer{ border-top: 1px solid var(--border); background: #0a0a0d; }
+
+/* ====== Responsive ====== */
+@media (max-width: 991px){
+  .section-pad-top{ padding-top: 92px; }
+  .card-img-top{ height: 180px; }
 }
-
-.banner p {
-    font-size: 1.1em;
-}
-
-/* Texto com gradiente */
-.gradientText {
-    display: inline-block;
-    background: var(--gradient-bg);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Texto digitando (Ajustado para responsividade) */
-.job {
-    font-weight: bold;
-    display: inline-block;
-    max-width: 100%;
-    text-align: left;
-}
-
-.job span {
-    display: inline-block;
-    vertical-align: top;
-    transition: transform 0.1s;
-    border-right: 2px solid var(--color-text);
-    animation: blinkCursor 0.7s steps(1) infinite;
-    min-width: 1ch;
-}
-
-/* Avatar */
-.avatar-container {
-    position: relative;
-    padding: 20px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.avatar-container::before {
-    content: '';
-    position: absolute;
-    width: 90%;
-    height: 90%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
-    box-shadow: var(--box-shadow);
-    z-index: -1;
-}
-
-.avatar-img {
-    width: 100%;
-    max-width: 90%;
-    height: auto;
-    border-radius: 10px;
-    animation: float 3s ease-in-out infinite;
-    display: block;
-}
-
-/* Títulos */
-.title {
-    font-weight: 700;
-    font-size: 2.1rem;
-    letter-spacing: 0.5px;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-/* Novo estilo para o botão */
-.btn-download {
-    display: inline-block;
-    padding: 15px 30px;
-    background-image: var(--gradient-bg);
-    border-radius: 50px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    text-decoration: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.btn-download:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Animação 'Clique Aqui' */
-.click-animation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #fff;
-    font-weight: 500;
-    font-size: 1rem;
-    animation: bounce 2s infinite;
-}
-
-.click-animation i {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
-}
-
-@keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        transform: translateY(0);
-    }
-
-    40% {
-        transform: translateY(-10px);
-    }
-
-    60% {
-        transform: translateY(-5px);
-    }
-}
-
-/* Lista de serviços (Cards) */
-#project {
-    padding-top: 50px;
-    border-bottom: 1px solid #2c8b65;
-}
-
-.card {
-    background-color: var(--light);
-    border: none;
-    box-shadow: var(--box-shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 15px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.card-img-top {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.card-body .card-title {
-    color: var(--color-text);
-    font-weight: 500;
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-/* Seção de Contato */
-#contact {
-    padding-top: 50px;
-    padding-bottom: 50px;
-}
-
-.social-links li {
-    list-style: none;
-}
-
-.social-icon {
-    width: 50px;
-    height: 50px;
-    background-color: var(--light);
-    box-shadow: var(--box-shadow);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    transition: background-image 0.5s, color 0.5s;
-    font-size: 24px;
-}
-
-.social-icon:hover {
-    background-image: var(--gradient-bg);
-    color: #fff;
-}
-
-/* Botão WhatsApp flutuante */
-.whatsapp-float {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    bottom: 20px;
-    right: 20px;
-    background-color: #25d366;
-    color: #fff;
-    border-radius: 50%;
-    font-size: 24px;
-    box-shadow: 2px 2px 3px #999;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-}
-
-.whatsapp-float:hover {
-    transform: scale(1.1);
-    background-color: #128c7e;
-}
-
-.whatsapp-popup {
-    visibility: hidden;
-    width: 140px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 8px 0;
-    position: absolute;
-    top: 50%;
-    right: 100%;
-    margin-right: 10px;
-    margin-top: -15px;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    white-space: nowrap;
-}
-
-.whatsapp-popup::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    margin-top: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent transparent #555;
-}
-
-.whatsapp-float:hover .whatsapp-popup {
-    visibility: visible;
-    opacity: 1;
-}
-
-/* Botão Voltar ao Topo */
-#btnTopo {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: none;
-    background-color: var(--cor-principal);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
-}
-
-#btnTopo:hover {
-    filter: brightness(1.1);
-    transform: translateY(0) scale(1.05);
-}
-
-#btnTopo.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-}
-
-/* Animações extras */
-@keyframes blinkCursor {
-    50% {
-        border-color: transparent;
-    }
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
-}
-
-/* Animação Personalizada para Seções e Cards */
-.animated-section,
-.animated-card {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.animated-section.is-visible,
-.animated-card.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Ajuste de animação para dispositivos móveis */
-@media (max-width: 991px) {
-
-    .animated-section,
-    .animated-card {
-        transition: opacity 0.6s ease-out;
-        transform: translateY(0);
-    }
-
-    .animated-section.is-visible,
-    .animated-card.is-visible {
-        opacity: 1;
-    }
-}
-
-/* Responsividade: Ajustes gerais */
-@media screen and (max-width: 991px) {
-    .banner h1 {
-        font-size: 2.5em;
-    }
-
-    .banner .avatar-container {
-        margin-top: 30px;
-    }
-
-    .job {
-        white-space: normal;
-        height: auto;
-    }
-
-    .job span {
-        display: block;
-    }
-}
-
-@media screen and (max-width: 575px) {
-    .banner h1 {
-        font-size: 2em;
-    }
-
-    .btn-download {
-        font-size: 1rem;
-        padding: 10px 20px;
-    }
+@media (max-width: 575px){
+  .avatar-img{ width: min(96%, 420px); }
+  .whatsapp-popup{ display: none; }
 }
